@@ -1,0 +1,6 @@
+---
+# handlers file for Wordpress
+
+- name: restart apache2
+  service: name=apache2 enabled=yes state=restarted
+  when: ansible_os_family == 'Debian'

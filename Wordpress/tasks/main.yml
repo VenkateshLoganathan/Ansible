@@ -1,0 +1,27 @@
+---
+# tasks file for Wordpress
+
+- name: Install LAMP stack on ubuntu.
+  apt: name={{ item }} update_cache=yes cache_valid_time=3600
+  with_items:
+    - apache2
+    - mysql-server
+    - php5-mysql
+    - php5
+    - libapache2-mod-php5
+    - php5-mcrypt
+    - python-mysqldb
+    - php5-gd
+    - libssh2-php
+
+- name: set the password for mysql_user to access the database.
+  mysql_user: name=root password=gobye config_file=~/.my.cnf login_user=root login_password=gobye priv=*.*:ALL,GRANT state=present update_password=on_create
+
+- name: Prefer the index.php file as first.
+  copy: src=dir.conf dest=/etc/apache2/mods-enabled/dir.conf owner=root group=root mode=777 
+  notify:
+    - restart apache2
+
+# For Wordpress configuration please refer wordpress file
+
+- include: wordpress.yml

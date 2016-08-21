@@ -1,0 +1,6 @@
+---
+# vars file for Wordpress
+
+dbname: wordpress
+dbuser: wordpress
+dbpassword: password

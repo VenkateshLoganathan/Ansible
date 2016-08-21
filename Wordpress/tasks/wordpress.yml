@@ -1,0 +1,30 @@
+---
+
+- name: Create sepearate DB in mysql for storing the wordpress store.
+  mysql_db: name=wordpress state=present login_user=root login_password=gobye
+
+- name: Create new user for accessing wordpress database and give the permission access to it.
+  mysql_user: name=wordpress password=password login_user=root login_password=gobye priv=wordpress.*:ALL,GRANT state=present
+
+- name: Download the wordpress application files.
+  get_url: url=http://wordpress.org/latest.tar.gz dest=~ 
+
+- name: untar the downloaded tar file 
+  command: tar -xvf ~/wordpress-4.6.tar.gz
+
+- name: Check the wordpress config files is exists or not in document root
+  stat: path=/var/www/html/wordpress
+  register: exit
+
+- name: Move the wordpress application files into document root
+  command: mv {{ item.src }} {{ item.dest }}
+  with_items:
+    - { src: '~/wordpress', dest: '/var/www/html/' }
+    - { src: '/var/www/html/wordpress/wp-config-sample.php', dest: '/var/www/html/wordpress/wp-config.php' }
+  when: exit.stat.exists == False
+
+- name: Copy the wp-config file to Document root
+  template: src=wp-config.php.j2 dest=/var/www/html/wordpress/wp-config.php owner=www-data group=www-data mode=777
+
+- name: Create the uploaded contents house to store the site file.
+  file: dest=/var/www/html/wp-content/uploads owner=www-data group=www-data mode=777 state=directory
