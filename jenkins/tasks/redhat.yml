@@ -1,0 +1,34 @@
+---
+
+# ------  Install Jenkins Continuous Integration Tool -------
+
+- name: Ensure Java is installed in that server
+  shell: java -version
+  ignore_errors: yes
+  register: java_version
+
+- name: Install Java package if it's not installed 
+  yum: 
+    name: java-1.7.0-openjdk 
+    state: present 
+    update_cache: yes
+  when: java_version.rc != 0 
+
+ 
+- name: Add Jenkins repository to the server.
+  yum_repository:
+    name: Jenkins
+    description: Jenkins repo
+    baseurl: "{{ baseurl }}"
+    gpgcheck: yes
+    gpgkey: "{{ gpgkey }}" 
+    state: present 
+
+- name: Install Jenkins tool
+  yum: name=jenkins state=present update_cache=yes
+
+- name: Enable the Jenkins service while booting
+  shell: chkconfig jenkins on
+
+- name: Start the Jenkins service
+  service: name=jenkins state=started

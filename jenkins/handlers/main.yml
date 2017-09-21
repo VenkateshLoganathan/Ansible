@@ -1,0 +1,5 @@
+---
+# handlers file for jenkins
+
+- name: Start the Jenkins server
+  service: name=jenkins state=started
