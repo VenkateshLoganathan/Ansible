@@ -6,8 +6,7 @@ Install Jenkins continuous integration package on RHEL/CentOS and Ubuntu servers
 Requirements
 ------------
 
-CentOS server - 6.7
-RedHat server - 6.5 or 7
+CentOS server - 6 and 7
 
 Role Variables
 --------------
