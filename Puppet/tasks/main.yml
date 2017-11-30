@@ -1,7 +1,7 @@
 ---
 # tasks file for Puppet
 
-- hosts: agent
+- hosts: 10.1.248.96
   become: yes
   become_user: root
 
